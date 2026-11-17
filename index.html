@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Ensures proper rendering and touch zooming on mobile devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photography Showcase Card</title>
+    
+    <!-- Google Fonts: Importing 'Inter' for clean, modern typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN for utility-first responsive styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom CSS Configuration & Styles -->
+    <style>
+        /* Apply Inter font globally */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Smooth custom cubic-bezier transition for image zoom effect on hover */
+        .photo-zoom {
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        /* Trigger zoom when hovering over the parent card container */
+        .showcase-card:hover .photo-zoom {
+            transform: scale(1.05);
+        }
+
+        /* Subtle fade-in animation for the modal notification */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen flex items-center justify-center p-4 sm:p-6 md:p-8 transition-colors duration-300">
+
+    <!-- Main Container: Centers the showcase card on the screen -->
+    <main class="w-full max-w-md mx-auto">
+        
+        <!-- Showcase Card Component -->
+        <article class="showcase-card bg-white dark:bg-slate-900 rounded-3xl shadow-xl dark:shadow-2xl dark:shadow-black/50 overflow-hidden border border-slate-200/80 dark:border-slate-800 transition-all duration-300 hover:shadow-2xl">
+            
+            <!-- =================================================================
+                 PHOTO SECTION
+                 To use your own photo, replace the 'src' attribute below with 
+                 your image URL or local file path (e.g., "images/my-photo.jpg").
+                 ================================================================= -->
+            <div class="relative aspect-[4/3] w-full overflow-hidden bg-slate-200 dark:bg-slate-800">
+                <img 
+                    id="featured-photo"
+                    src="2544.webp" 
+                    alt="Scenic mountain valley at golden hour"
+                    onerror="this.onerror=null; this.src='https://placehold.co/800x600/1e293b/f8fafc?text=Featured+Photo';"
+                    class="photo-zoom w-full h-full object-cover object-center"
+                >
+                
+                <!-- Decorative Category Badge overlaid on the top-left of the photo -->
+                <div class="absolute top-4 left-4">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold tracking-wide uppercase bg-white/90 dark:bg-slate-900/90 text-slate-800 dark:text-slate-100 backdrop-blur-md shadow-sm">
+                        Featured Shot
+                    </span>
+                </div>
+            </div>
+
+            <!-- =================================================================
+                 CARD CONTENT SECTION
+                 Edit the title, metadata, description, and button text below.
+                 ================================================================= -->
+            <div class="p-6 sm:p-8">
+                
+                <!-- Location / Date Metadata -->
+                <div class="flex items-center gap-2 text-xs font-medium text-indigo-600 dark:text-indigo-400 mb-2">
+                    <!-- Location Pin SVG Icon -->
+                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                    <span>Yosemite Valley, California</span>
+                </div>
+
+                <!-- Card Title -->
+                <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white mb-3">
+                    Golden Hour Serenity
+                </h1>
+
+                <!-- Short Description -->
+                <p class="text-slate-600 dark:text-slate-400 text-sm sm:text-base leading-relaxed mb-6">
+                    Captured just before dusk as warm amber light spilled across the valley floor, illuminating the granite peaks and tranquil river below.
+                </p>
+
+                <!-- Divider Line -->
+                <hr class="border-slate-100 dark:border-slate-800 mb-6">
+
+                <!-- Footer: Photographer Info & Call-To-Action Button -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    
+                    <!-- Photographer Mini-Profile -->
+                    <div class="flex items-center gap-3">
+                        <img 
+                            src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" 
+                            alt="Photographer Avatar"
+                            onerror="this.onerror=null; this.src='https://placehold.co/100x100/6366f1/ffffff?text=ER';"
+                            class="w-10 h-10 rounded-full object-cover ring-2 ring-slate-100 dark:ring-slate-800"
+                        >
+                        <div>
+                            <p class="text-sm font-semibold text-slate-900 dark:text-white leading-none">
+                                Elena Rostova
+                            </p>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                                Landscape Photographer
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Clean Call-to-Action Button -->
+                    <button 
+                        id="cta-button"
+                        type="button"
+                        onclick="openPhotoModal()"
+                        class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900 shadow-sm hover:shadow transition-all duration-200 cursor-pointer w-full sm:w-auto"
+                    >
+                        <span>View Full Size</span>
+                        <!-- Arrow Right SVG Icon -->
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                        </svg>
+                    </button>
+
+                </div>
+            </div>
+        </article>
+
+    </main>
+
+    <!-- =================================================================
+         INTERACTIVE LIGHTBOX MODAL (Triggered by the CTA Button)
+         Allows visitors to inspect the high-resolution photo cleanly.
+         ================================================================= -->
+    <div 
+        id="photo-modal" 
+        class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4"
+        role="dialog" 
+        aria-modal="true" 
+        aria-labelledby="modal-title"
+        onclick="closePhotoModal(event)"
+    >
+        <div class="relative max-w-3xl w-full bg-white dark:bg-slate-900 rounded-2xl overflow-hidden shadow-2xl animate-fade-in" onclick="event.stopPropagation()">
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between px-5 py-4 border-b border-slate-100 dark:border-slate-800">
+                <h2 id="modal-title" class="text-base font-semibold text-slate-900 dark:text-white">
+                    Golden Hour Serenity — Full Resolution
+                </h2>
+                <button 
+                    type="button" 
+                    onclick="closePhotoModal()"
+                    class="p-2 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                    aria-label="Close modal"
+                >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Modal Image Container -->
+            <div class="bg-slate-950 flex items-center justify-center max-h-[75vh] overflow-hidden">
+                <img 
+                    id="modal-image"
+                    src="" 
+                    alt="Full resolution preview" 
+                    class="max-h-[75vh] w-auto object-contain"
+                >
+            </div>
+
+            <!-- Modal Footer with Camera EXIF Details -->
+            <div class="px-5 py-3 bg-slate-50 dark:bg-slate-900/50 text-xs text-slate-500 dark:text-slate-400 flex flex-wrap items-center justify-between gap-2">
+                <span>Shot on Sony A7R IV • 24mm f/1.4 GM</span>
+                <span>ISO 100 • f/8.0 • 1/250s</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript for Lightbox Functionality -->
+    <script>
+        /**
+         * Opens the full-size photo modal and syncs the image source
+         * automatically with whatever image is currently in the card.
+         */
+        function openPhotoModal() {
+            try {
+                const featuredImg = document.getElementById('featured-photo');
+                const modal = document.getElementById('photo-modal');
+                const modalImg = document.getElementById('modal-image');
+
+                if (featuredImg && modal && modalImg) {
+                    modalImg.src = featuredImg.src;
+                    modal.classList.remove('hidden');
+                    modal.classList.add('flex');
+                    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+                }
+            } catch (error) {
+                console.error('Error opening photo modal:', error);
+            }
+        }
+
+        /**
+         * Closes the full-size photo modal.
+         */
+        function closePhotoModal() {
+            try {
+                const modal = document.getElementById('photo-modal');
+                if (modal) {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                    document.body.style.overflow = ''; // Restore background scrolling
+                }
+            } catch (error) {
+                console.error('Error closing photo modal:', error);
+            }
+        }
+
+        // Allow closing the modal with the Escape key for accessibility
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closePhotoModal();
+            }
+        });
+    </script>
+</body>
+</html>
